@@ -1,3 +1,7 @@
+flask
+gunicorn
+
+
 aext-assistant @ file:///C:/b/abs_98xvdek9qa/croot/aext-assistant_1734644152369/work
 aext-assistant-server @ file:///C:/b/abs_93twy7n40b/croot/aext-assistant-server_1734640405857/work
 aext-core @ file:///C:/b/abs_73k82brgp5/croot/aext-core_1734637800697/work
