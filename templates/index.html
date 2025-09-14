@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Elephant Cards Web App</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 1000px; margin: auto; }
+        .form-group { margin-bottom: 10px; }
+        label { display: inline-block; width: 100px; }
+        input[type=text], input[type=file], input[type=number] { width: 200px; }
+        .btn { padding: 5px 10px; margin-right: 5px; cursor: pointer; }
+        .card { border: 1px solid #333; padding: 10px; margin: 10px; display: inline-block; vertical-align: top; background: #f5f5f5; width: 320px; }
+        .card img { width: 100px; height: 100px; object-fit: cover; }
+        .color-bar { height: 12px; width: 180px; margin: 2px 0; border: 1px solid black; }
+        .highlight { background: yellow; }
+        .flash { color: red; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+<h2>Elephant Cards Web App</h2>
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for msg in messages %}
+      <div class="flash">{{ msg }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<form method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label>ID (ระบุเองได้):</label>
+        <input type="number" name="manual_id" min="1" placeholder="ว่างไว้ให้ระบบกำหนด">
+    </div>
+    <div class="form-group">
+        <label>Name:</label>
+        <input type="text" name="name" value="{{ form_data['name'] if form_data else '' }}">
+    </div>
+    <div class="form-group">
+        <label>Gender:</label>
+        <input type="text" name="gender" value="{{ form_data['gender'] if form_data else '' }}">
+    </div>
+    <div class="form-group">
+        <label>Origin:</label>
+        <input type="text" name="origin" value="{{ form_data['origin'] if form_data else '' }}">
+    </div>
+    <div class="form-group">
+        <label>Health:</label>
+        <input type="text" name="health" value="{{ form_data['health'] if form_data else '' }}">
+    </div>
+    <div class="form-group">
+        <label>Image:</label>
+        <input type="file" name="img">
+    </div>
+
+    {% if form_data %}
+        <input type="hidden" name="elephant_id" value="{{ form_data['id'] }}">
+    {% endif %}
+
+    <button class="btn" name="action" value="add">➕ Add</button>
+    <button class="btn" name="action" value="save">💾 Save</button>
+    <button class="btn" name="action" value="delete">🗑️ Delete</button>
+    <button class="btn" name="action" value="clear">🗑️ Clear All</button>
+    <button class="btn" name="action" value="random">🎲 Generate Random</button>
+</form>
+
+<form method="post" style="margin-top:10px;">
+    <input type="text" name="search" placeholder="Search by ID/Name">
+    <button class="btn" name="action" value="search">🔎 Search</button>
+</form>
+
+<form method="post" style="margin-top:10px;">
+    <button class="btn" name="action" value="export_csv">💾 Export CSV</button>
+    <button class="btn" name="action" value="export_json">💾 Export JSON</button>
+</form>
+
+<hr>
+<h3>Elephant Cards:</h3>
+<div>
+    {% for e in elephants %}
+        <div class="card">
+            {% if e['img'] %}
+                <img src="/{{ e['img'] }}" alt="Elephant">
+            {% else %}
+                <div style="width:100px; height:100px; background:#ccc; text-align:center; line-height:100px;">No Image</div>
+            {% endif %}
+            <p>ID: {{ e['id'] }}</p>
+            <p>Name: {{ e['name'] }}</p>
+            <p>Gender: {{ e['gender'] }}</p>
+            <p>Origin: {{ e['origin'] }}</p>
+            <p>Health: {{ e['health'] }}</p>
+            <p>LipBrand Code:</p>
+            {% for color in e['code'].split('-') %}
+                <div class="color-bar" style="background: {{ color.lower() }}"></div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>
+
+</div>
+</body>
+</html>
